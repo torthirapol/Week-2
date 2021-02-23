@@ -48,9 +48,9 @@ uint16_t ButtonMatrixState = 0;
 
 //Button TimeStamp
 uint32_t ButtonMatrixTimestamp = 0;
-uint16_t Student_ID = 0;
-int Check = 0;
+int count = 0;
 int State = 0;
+int check = 0;
 
 /* USER CODE END PV */
 
@@ -277,110 +277,124 @@ void ButtonMatrixUpdate() {
 			if (PinState == GPIO_PIN_RESET) // Button Press
 					{
 				ButtonMatrixState |= (uint16_t) 1 << (i + ButtonMatrixRow * 4);
-				Student_ID = Student_ID << 1;
 				switch (State) {
 				case 0:
-					if (ButtonMatrixState == 0b1000000 && check == 0) { //6
-						Student_ID |= 1;
+					count = 0;
+					if (ButtonMatrixState == 0b1000000) { //6
+						count+= 1;
 						State = 1;
 					} else {
-						state = 0;
+						State = 0;
 						check += 1;
 					}
 					break;
 				case 1:
 					if (ButtonMatrixState == 0b1000000000) { //62
-						Student_ID |= 1;
+						count+= 1;
 						State = 2;
 					} else {
-						state = 0;
+						State = 0;
+						check += 1;
 					}
 					break;
 				case 2:
 					if (ButtonMatrixState == 0b10000000000) { //623
-						Student_ID |= 1;
+						count += 1;
 						State = 3;
 					} else {
-						state = 0;
+						State = 0;
+						check += 1;
 					}
 					break;
 				case 3:
-					if (ButtonMatrixState == 0b100000000000) { //6234
-						Student_ID |= 1;
+					if (ButtonMatrixState == 0b10000) { //6234
+						count += 1;
 						State = 4;
 					} else {
-						state = 0;
+						State = 0;
+						check += 1;
 					}
 					break;
 				case 4:
 					if (ButtonMatrixState == 0b1000000000000) { //62340
-						Student_ID |= 1;
+						count += 1;
 						State = 5;
 					} else {
-						state = 0;
+						State = 0;
+						check += 1;
 					}
 					break;
 				case 5:
 					if (ButtonMatrixState == 0b100000) { //623405
-						Student_ID |= 1;
+						count += 1;
 						State = 6;
 					} else {
-						state = 0;
+						State = 0;
+						check += 1;
 					}
 					break;
 				case 6:
 					if (ButtonMatrixState == 0b1000000000000) { //6234050
-						Student_ID |= 1;
+						count += 1;
 						State = 7;
 					} else {
-						state = 0;
+						State = 0;
+						check += 1;
 					}
 					break;
 				case 7:
 					if (ButtonMatrixState == 0b1000000000000) { //62340500
-						Student_ID |= 1;
+						count += 1;
 						State = 8;
 					} else {
-						state = 0;
+						State = 0;
+						check += 1;
 					}
 					break;
 				case 8:
 					if (ButtonMatrixState == 0b1000000000000) { //623405000
-						Student_ID |= 1;
+						count += 1;
 						State = 9;
 					} else {
-						state = 0;
+						State = 0;
+						check += 1;
 					}
 					break;
 				case 9:
 					if (ButtonMatrixState == 0b1000000000) { //6234050002
-						Student_ID |= 1;
+						count += 1;
 						State = 10;
 					} else {
-						state = 0;
+						State = 0;
+						check += 1;
 					}
 					break;
 				case 10:
 					if (ButtonMatrixState == 0b10000000000) { //62340500023
-						Student_ID |= 1;
+						count += 1;
 						State = 11;
 					} else {
-						state = 0;
+						State = 0;
+						check += 1;
 					}
 					break;
 				case 11:
-
-					if (ButtonMatrixState == 0b1000000000000000) {
-						if (Student_ID == 0b11111111111
-								&& HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5)== GPIO_PIN_RESET) {
-
+					if (ButtonMatrixState == 0b1000000000000000 && check == 0) {
+						if (count == 11 && HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5)== GPIO_PIN_RESET) {
+							HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 						}
-						Student_ID |= 1;
 					} else {
-						state = 0;
+						State = 0;
+
 					}
 					break;
 				}
+			    if(ButtonMatrixState == 0b1000){
+			    	check = 0;
+			    	count = 0;
+			    	State = 0;
+			    	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+			    }
 			}
 			else
 			{
