@@ -1299,7 +1299,7 @@ void ButtonMatrixUpdate() {
 					break;
  8000a6e:	e01f      	b.n	8000ab0 <ButtonMatrixUpdate+0x308>
 				case 11:
-					if (ButtonMatrixState == 0b1000000000000000 && check == 0) {
+					if (ButtonMatrixState == 0b1000000000000000 && check == 0) {// OK
  8000a70:	4b40      	ldr	r3, [pc, #256]	; (8000b74 <ButtonMatrixUpdate+0x3cc>)
  8000a72:	881b      	ldrh	r3, [r3, #0]
  8000a74:	f5b3 4f00 	cmp.w	r3, #32768	; 0x8000
@@ -1332,7 +1332,6 @@ void ButtonMatrixUpdate() {
  8000aa4:	4b31      	ldr	r3, [pc, #196]	; (8000b6c <ButtonMatrixUpdate+0x3c4>)
  8000aa6:	2200      	movs	r2, #0
  8000aa8:	601a      	str	r2, [r3, #0]
-
 					}
 					break;
  8000aaa:	e000      	b.n	8000aae <ButtonMatrixUpdate+0x306>
@@ -1341,7 +1340,7 @@ void ButtonMatrixUpdate() {
 					break;
  8000aae:	bf00      	nop
 				}
-			    if(ButtonMatrixState == 0b1000){
+			    if(ButtonMatrixState == 0b1000){ // Clear
  8000ab0:	4b30      	ldr	r3, [pc, #192]	; (8000b74 <ButtonMatrixUpdate+0x3cc>)
  8000ab2:	881b      	ldrh	r3, [r3, #0]
  8000ab4:	2b08      	cmp	r3, #8
@@ -1413,6 +1412,7 @@ void ButtonMatrixUpdate() {
  8000b24:	4619      	mov	r1, r3
  8000b26:	f000 fc01 	bl	800132c <HAL_GPIO_WritePin>
 				ButtonMatrixPin[NowOutputPin], GPIO_PIN_SET);
+
 		// update New Row
 		ButtonMatrixRow = (ButtonMatrixRow + 1) % 4;
  8000b2a:	4b15      	ldr	r3, [pc, #84]	; (8000b80 <ButtonMatrixUpdate+0x3d8>)
@@ -1431,6 +1431,7 @@ void ButtonMatrixUpdate() {
  8000b46:	781b      	ldrb	r3, [r3, #0]
  8000b48:	3304      	adds	r3, #4
  8000b4a:	70bb      	strb	r3, [r7, #2]
+
 		//Reset Rn+1
 		HAL_GPIO_WritePin(ButtonMatrixPort[NextOutputPin],
  8000b4c:	78bb      	ldrb	r3, [r7, #2]

@@ -379,17 +379,16 @@ void ButtonMatrixUpdate() {
 					}
 					break;
 				case 11:
-					if (ButtonMatrixState == 0b1000000000000000 && check == 0) {
+					if (ButtonMatrixState == 0b1000000000000000 && check == 0) {// OK
 						if (count == 11 && HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5)== GPIO_PIN_RESET) {
 							HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 						}
 					} else {
 						State = 0;
-
 					}
 					break;
 				}
-			    if(ButtonMatrixState == 0b1000){
+			    if(ButtonMatrixState == 0b1000){ // Clear
 			    	check = 0;
 			    	count = 0;
 			    	State = 0;
@@ -405,9 +404,11 @@ void ButtonMatrixUpdate() {
 		//SET Rn
 		HAL_GPIO_WritePin(ButtonMatrixPort[NowOutputPin],
 				ButtonMatrixPin[NowOutputPin], GPIO_PIN_SET);
+
 		// update New Row
 		ButtonMatrixRow = (ButtonMatrixRow + 1) % 4;
 		uint8_t NextOutputPin = ButtonMatrixRow + 4;
+
 		//Reset Rn+1
 		HAL_GPIO_WritePin(ButtonMatrixPort[NextOutputPin],
 				ButtonMatrixPin[NextOutputPin], GPIO_PIN_RESET);
